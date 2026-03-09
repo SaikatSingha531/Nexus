@@ -121,8 +121,8 @@ export const getVideoById = async (id: string | number) => {
   const { data, error } = await supabase
     .from("videoform")
     .select("*")
-    .eq("id", id) // Match the 'id' column with the passed ID
-    .single();    // Ensures the result is an object, not an array
+    .eq("id", id) 
+    .single();    
 
   if (error) {
     console.error("Error fetching video:", error.message);
@@ -158,3 +158,53 @@ export const getVideoById = async (id: string | number) => {
 //   if (error) console.error('Error adding to cart:', error);
 //   else alert('Course added to cart!');
 // };
+
+
+
+
+
+
+
+
+export const deleteVideo = async (videoId: string | number) => {
+  /* 1. Fetch the video record first to get the file paths */
+  const { data: video, error: fetchError } = await supabase
+    .from("videoform")
+    .select("image, intro_video, main_video")
+    .eq("id", videoId)
+    .single();
+
+  if (fetchError) throw new Error("Video not found");
+
+  /* 2. Helper to extract storage paths from Public URLs */
+  // This assumes your URLs look like: .../storage/v1/object/public/bucket-name/filename
+  const getFilePath = (url: string, bucket: string) => {
+    const parts = url.split(`${bucket}/`);
+    return parts.length > 1 ? parts[1] : null;
+  };
+
+  /* 3. Delete files from Storage */
+  const filesToDelete: { bucket: string; path: string }[] = [];
+  
+  if (video.image) filesToDelete.push({ bucket: "course-image", path: getFilePath(video.image, "course-image")! });
+  if (video.intro_video) filesToDelete.push({ bucket: "course-videos", path: getFilePath(video.intro_video, "course-videos")! });
+  if (video.main_video) filesToDelete.push({ bucket: "course-videos", path: getFilePath(video.main_video, "course-videos")! });
+
+  for (const file of filesToDelete) {
+    const { error: storageError } = await supabase.storage
+      .from(file.bucket)
+      .remove([file.path]);
+    
+    if (storageError) console.error(`Failed to delete storage file: ${file.path}`);
+  }
+
+  /* 4. Delete the row from the Database */
+  const { error: dbError } = await supabase
+    .from("videoform")
+    .delete()
+    .eq("id", videoId);
+
+  if (dbError) throw new Error(dbError.message);
+
+  return { success: true };
+};
