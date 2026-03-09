@@ -1,5 +1,6 @@
 import { getVideoById } from "@/zustand/addvideostore";
 import { notFound } from "next/navigation";
+import Link from "next/link"; // Import Link
 import { 
   PlayCircle, 
   CheckCircle2, 
@@ -7,7 +8,8 @@ import {
   Globe, 
   Users, 
   Award, 
-  ShieldCheck 
+  ShieldCheck,
+  ArrowLeft // Import ArrowLeft
 } from "lucide-react";
 
 interface PageProps {
@@ -28,6 +30,16 @@ const Videowithid = async ({ params }: PageProps) => {
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-violet-600/10 blur-[140px] rounded-full" />
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
+          
+          {/* BACK BUTTON */}
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 group"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-semibold text-sm">Back to Courses</span>
+          </Link>
+
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             
             {/* Left Content */}
