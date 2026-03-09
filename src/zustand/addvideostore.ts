@@ -131,3 +131,30 @@ export const getVideoById = async (id: string | number) => {
 
   return data;
 };
+
+
+// Add to cart function  
+
+// const addToCart = async (course) => {
+//   const { data: { user } } = await supabase.auth.getUser();
+
+//   if (!user) {
+//     alert("Please login to add items to cart");
+//     return;
+//   }
+
+//   const { error } = await supabase
+//     .from('cart')
+//     .insert([
+//       { 
+//         user_id: user.id, 
+//         course_id: course.id,
+//         course_title: course.title,
+//         price_string: course.price, // Saving as string
+//         price_numeric: parseFloat(course.price) // Useful for later
+//       }
+//     ]);
+
+//   if (error) console.error('Error adding to cart:', error);
+//   else alert('Course added to cart!');
+// };

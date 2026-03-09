@@ -3,7 +3,7 @@
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1c1d1f] text-gray-300 mt-20">
+    <footer className="bg-[#1c1d1f] text-gray-300 ">
       
       {/* TOP BAR */}
       <div className="border-b border-gray-700 px-10 py-6 flex flex-col md:flex-row justify-between items-center">

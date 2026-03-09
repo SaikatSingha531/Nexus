@@ -15,10 +15,8 @@ import {
   Video, 
   Image as ImageIcon, 
   ChevronRight, 
-  PlusCircle, 
   Info, 
   Sparkles,
-  Loader2
 } from "lucide-react";
 
 import Image from "next/image";
@@ -28,14 +26,6 @@ import { toast } from "sonner";
 /* ---------------- Validation ---------------- */
 
 
-// type FormData = {
-//   title: string;
-//   description: string;
-//   category: string;
-//   level: string;
-//   instructor: string;
-//   price: string | null;
-// };
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
