@@ -23,11 +23,11 @@ export default function Sidebar() {
       icon: Bell,
       path: "/admin/addnotification",
     },
-    {
-      label: "User Progress",
-      icon: BarChart3,
-      path: "/admin/progress",
-    },
+    // {
+    //   label: "User Progress",
+    //   icon: BarChart3,
+    //   path: "/admin/progress",
+    // },
   ];
 
   return (
