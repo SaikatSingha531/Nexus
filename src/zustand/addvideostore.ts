@@ -133,31 +133,21 @@ export const getVideoById = async (id: string | number) => {
 };
 
 
-// Add to cart function  
+// export const updatecourse = async (id:string , updateData:any)=>{
+//   const {error} = await supabase
+//   .from("videoform")
+//   .update({
+//     title:updateData.title,
+//     instructor: updateData.instructor,
+//       category: updateData.category,
+//       price: updateData.price,
+//       level: updateData.level,
+//   })
+//   .eq("id",id)
 
-// const addToCart = async (course) => {
-//   const { data: { user } } = await supabase.auth.getUser();
-
-//   if (!user) {
-//     alert("Please login to add items to cart");
-//     return;
-//   }
-
-//   const { error } = await supabase
-//     .from('cart')
-//     .insert([
-//       { 
-//         user_id: user.id, 
-//         course_id: course.id,
-//         course_title: course.title,
-//         price_string: course.price, // Saving as string
-//         price_numeric: parseFloat(course.price) // Useful for later
-//       }
-//     ]);
-
-//   if (error) console.error('Error adding to cart:', error);
-//   else alert('Course added to cart!');
-// };
+//   if (error) throw new Error(error.message);
+//   return { success: true };
+// }
 
 
 
@@ -167,7 +157,6 @@ export const getVideoById = async (id: string | number) => {
 
 
 export const deleteVideo = async (videoId: string | number) => {
-  /* 1. Fetch the video record first to get the file paths */
   const { data: video, error: fetchError } = await supabase
     .from("videoform")
     .select("image, intro_video, main_video")
@@ -176,14 +165,11 @@ export const deleteVideo = async (videoId: string | number) => {
 
   if (fetchError) throw new Error("Video not found");
 
-  /* 2. Helper to extract storage paths from Public URLs */
-  // This assumes your URLs look like: .../storage/v1/object/public/bucket-name/filename
   const getFilePath = (url: string, bucket: string) => {
     const parts = url.split(`${bucket}/`);
     return parts.length > 1 ? parts[1] : null;
   };
 
-  /* 3. Delete files from Storage */
   const filesToDelete: { bucket: string; path: string }[] = [];
   
   if (video.image) filesToDelete.push({ bucket: "course-image", path: getFilePath(video.image, "course-image")! });
@@ -197,8 +183,6 @@ export const deleteVideo = async (videoId: string | number) => {
     
     if (storageError) console.error(`Failed to delete storage file: ${file.path}`);
   }
-
-  /* 4. Delete the row from the Database */
   const { error: dbError } = await supabase
     .from("videoform")
     .delete()

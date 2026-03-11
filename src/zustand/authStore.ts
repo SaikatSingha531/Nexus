@@ -70,7 +70,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
    loginUser: async (data) => {
-    console.log("data coming in zustand", data);
+    // console.log("data coming in zustand", data);
     set({ loading: true });
     try {
       set({ loading: true, success: true });
@@ -144,4 +144,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       };
     }
   },
+
 }));
+

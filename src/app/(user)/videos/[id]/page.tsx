@@ -1,6 +1,8 @@
 import { getVideoById } from "@/zustand/addvideostore";
 import { notFound } from "next/navigation";
-import Link from "next/link"; // Import Link
+import Link from "next/link";
+
+
 import { 
   PlayCircle, 
   CheckCircle2, 
@@ -9,8 +11,9 @@ import {
   Users, 
   Award, 
   ShieldCheck,
-  ArrowLeft // Import ArrowLeft
+  ArrowLeft 
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -19,6 +22,8 @@ interface PageProps {
 const Videowithid = async ({ params }: PageProps) => {
   const resolvedParams = await params;
   const video = await getVideoById(resolvedParams.id);
+
+
 
   if (!video) notFound();
 

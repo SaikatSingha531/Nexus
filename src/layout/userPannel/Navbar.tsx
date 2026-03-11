@@ -84,7 +84,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ⚡ ACTION HUB */}
       <div className="flex items-center gap-3">
         {user && (
           <div className="flex items-center gap-1 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50">
@@ -101,18 +100,6 @@ const Navbar = () => {
                 </span>
             </button>
 
-            {/* CART */}
-            <button
-              onClick={() => router.push("/cart")}
-              className="relative p-2.5 text-slate-500 hover:text-purple-600 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm"
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute top-1 right-1 h-4 w-4 bg-slate-900 text-[9px] font-bold text-white flex items-center justify-center rounded-full ring-2 ring-white">
-                0
-              </span>
-            </button>
-
-            {/* NOTIFICATIONS */}
             <button
               onClick={() => router.push("/notification")}
               className="relative p-2.5 text-slate-500 hover:text-blue-600 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm group"

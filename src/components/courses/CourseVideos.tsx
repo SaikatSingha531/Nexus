@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   Heart,
-  ShoppingCart,
   Star,
   Users,
   ArrowRight,
@@ -16,6 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useWishlist } from "@/hooks/useWishlist";
 
+import { useAuthStore } from "@/zustand/authStore";
+
 import {
   Pagination,
   PaginationContent,
@@ -24,6 +25,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { toast } from "sonner";
 
 const ITEMS_PER_PAGE = 12;
 const categories = ["All", "IT", "Design", "Business", "Health", "Music"];
@@ -34,6 +36,16 @@ const CourseVideos = () => {
   const [category, setCategory] = useState("All");
 
   const { toggleWishlist, isInWishlist } = useWishlist();
+
+  const { user } = useAuthStore();
+
+  const handleWishlist = () => {
+    if (!user) {
+      toast.error("Login To Get More Fetures");
+      return;
+    }
+    toggleWishlist(videos);
+  };
 
   if (isLoading) {
     return (
@@ -143,7 +155,7 @@ const CourseVideos = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <button
-                  onClick={() => toggleWishlist(video)}
+                  onClick={() => handleWishlist()}
                   className={`absolute top-3 right-3 z-10 p-1.5 rounded-lg shadow-sm backdrop-blur-md transition-all duration-300 ${
                     isInWishlist(video.id)
                       ? "bg-rose-500 text-white"
@@ -183,15 +195,15 @@ const CourseVideos = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex  justify-center">
                   <div>
                     <p className="text-xl font-black text-slate-900">
                       ₹{video.price}
                     </p>
                   </div>
-                  <button className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:bg-violet-600 hover:text-white transition-all duration-300">
+                  {/* <button className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:bg-violet-600 hover:text-white transition-all duration-300">
                     <ShoppingCart className="w-4 h-4" />
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* Shortened button height */}
@@ -213,7 +225,11 @@ const CourseVideos = () => {
               <PaginationContent className="gap-1">
                 <PaginationItem>
                   <PaginationPrevious
-                    className="rounded-lg hover:bg-violet-50 hover:text-violet-600 transition-all border-none cursor-pointer scale-90"
+                    className={`rounded-lg transition-all border-none scale-90 ${
+                      currentPage === 1
+                        ? "pointer-events-none opacity-40"
+                        : "cursor-pointer hover:bg-violet-50 hover:text-violet-600"
+                    }`}
                     onClick={() =>
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
@@ -236,7 +252,11 @@ const CourseVideos = () => {
                 ))}
                 <PaginationItem>
                   <PaginationNext
-                    className="rounded-lg hover:bg-violet-50 hover:text-violet-600 transition-all border-none cursor-pointer scale-90"
+                    className={`rounded-lg transition-all border-none scale-90 ${
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-40"
+                        : "cursor-pointer hover:bg-violet-50 hover:text-violet-600"
+                    }`}
                     onClick={() =>
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
