@@ -2,6 +2,8 @@ import { getVideoById } from "@/zustand/addvideostore";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
+import EnrollButton from "@/components/EnrollButton";
+
 
 import { 
   PlayCircle, 
@@ -11,7 +13,8 @@ import {
   Users, 
   Award, 
   ShieldCheck,
-  ArrowLeft 
+  ArrowLeft, 
+  Download
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -22,7 +25,6 @@ interface PageProps {
 const Videowithid = async ({ params }: PageProps) => {
   const resolvedParams = await params;
   const video = await getVideoById(resolvedParams.id);
-
 
 
   if (!video) notFound();
@@ -141,13 +143,25 @@ const Videowithid = async ({ params }: PageProps) => {
                   </span>
                </div>
                
-               <div className="aspect-video bg-black rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white ring-1 ring-slate-200">
+               <div
+                className="aspect-video bg-black rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white ring-1 ring-slate-200">
                   <video 
                     src={video.main_video} 
                     controls 
                     className="w-full h-full"
                   />
                </div>
+
+               <div className="flex justify-end px-4 mt-4">
+  <a
+    href={video.image}
+    download
+    className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 transition"
+  >
+    <Download className="w-5 h-5" />
+    Download Image
+  </a>
+</div>
             </div>
           </div>
 
@@ -174,12 +188,9 @@ const Videowithid = async ({ params }: PageProps) => {
                     Full Lifetime Access
                   </div>
                 </div>
-
-                <button className="w-full bg-slate-900 hover:bg-violet-600 text-white py-6 rounded-[1.5rem] font-bold text-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 group">
-                  Enroll Now
-                  <PlayCircle className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                </button>
                 
+                <EnrollButton video={video} />
+
                 <p className="text-center text-[11px] text-slate-400 mt-6 uppercase font-bold tracking-widest">
                   Secure checkout powered by Creator Studio
                 </p>

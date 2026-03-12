@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   ShoppingCart,
   Bell,
@@ -10,17 +11,47 @@ import {
   Loader2,
   Sparkles,
 } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/zustand/authStore";
 import { useNotifications } from "@/hooks/useNotifications";
+import { getVideos } from "@/zustand/addvideostore"; // adjust if your file path is different
 
 const Navbar = () => {
-  
   const router = useRouter();
   const { user, logoutUser, loading } = useAuthStore();
   const { data: notifications } = useNotifications();
 
   const count = notifications?.length || 0;
+
+  /* ---------- SEARCH STATES ---------- */
+
+  const [search, setSearch] = useState("");
+  const [videos, setVideos] = useState<any[]>([]);
+  const [filteredVideos, setFilteredVideos] = useState<any[]>([]);
+
+  /* ---------- FETCH VIDEOS ---------- */
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const data = await getVideos();
+      setVideos(data || []);
+    };
+
+    fetchVideos();
+  }, []);
+
+  /* ---------- FILTER SEARCH ---------- */
+
+  useEffect(() => {
+    const filtered = videos.filter((v) =>
+      `${v.title} ${v.category} ${v.description}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+
+    setFilteredVideos(filtered);
+  }, [search, videos]);
 
   const handleAuthClick = async () => {
     if (user) {
@@ -39,16 +70,13 @@ const Navbar = () => {
         className="group relative flex items-center gap-4 cursor-pointer"
       >
         <div className="relative">
-          {/* Animated Glow Backdrop */}
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-500 rounded-2xl blur-md opacity-25 group-hover:opacity-60 transition duration-500 group-hover:duration-200 animate-pulse"></div>
 
-          {/* The Glass Icon */}
           <div className="relative h-12 w-12 bg-slate-900 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-rotate-3 overflow-hidden">
             <Sparkles className="absolute top-1 right-1 w-3 h-3 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="text-white font-black text-2xl tracking-tighter">
               N
             </span>
-            {/* Shimmer Overlay */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           </div>
         </div>
@@ -63,41 +91,73 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* 🔍 THE "FLOATING ISLAND" SEARCH BAR */}
+      {/* 🔍 SEARCH BAR */}
       <div className="hidden lg:flex flex-1 max-w-xl mx-12 relative group">
         <div className="absolute -inset-[1px] bg-gradient-to-r from-slate-200 via-purple-400/40 to-slate-200 rounded-2xl opacity-100 group-focus-within:from-purple-500 group-focus-within:to-blue-500 transition-all duration-500" />
+
         <div className="relative w-full flex items-center bg-white/90 rounded-[15px] px-5 py-2.5 shadow-inner">
           <Search
             size={18}
             className="text-slate-400 group-focus-within:text-purple-600 transition-colors"
           />
+
           <input
             type="text"
             placeholder="Search your future..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="bg-transparent w-full outline-none text-sm ml-4 text-slate-800 placeholder:text-slate-400 font-medium"
           />
+
           <div className="flex items-center gap-1.5 ml-2">
             <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 font-mono text-[10px] font-medium text-slate-500 opacity-100">
               <span className="text-xs">⌘</span>K
             </kbd>
           </div>
         </div>
+
+        {/* 🔎 SEARCH RESULTS */}
+        {search && filteredVideos.length > 0 && (
+          <div className="absolute top-14 w-full bg-white rounded-xl shadow-xl border p-2 max-h-80 overflow-y-auto z-50">
+            {filteredVideos.map((video) => (
+              <div
+                key={video.id}
+                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded cursor-pointer"
+                onClick={() => {
+                  router.push(`/videos/${video.id}`);
+                  setSearch("");
+                  setFilteredVideos([]);
+                }}
+              >
+                <img
+                  src={video.image}
+                  alt={video.title}
+                  className="w-10 h-10 object-cover rounded"
+                />
+
+                <div>
+                  <p className="text-sm font-semibold">{video.title}</p>
+                  <p className="text-xs text-gray-500">{video.category}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
+      {/* RIGHT SIDE */}
       <div className="flex items-center gap-3">
         {user && (
           <div className="flex items-center gap-1 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50">
-            {/* WISHLIST */}
-
             <button
               onClick={() => router.push("/wishlist")}
               className="relative p-2.5 text-slate-500 hover:text-red-500 hover:bg-white rounded-xl transition-all"
             >
               <Heart size={20} />
               <span className="absolute top-1 right-1 flex h-4 w-4">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600 border-2 border-white"></span>
-                </span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600 border-2 border-white"></span>
+              </span>
             </button>
 
             <button
@@ -105,6 +165,7 @@ const Navbar = () => {
               className="relative p-2.5 text-slate-500 hover:text-blue-600 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm group"
             >
               <Bell size={20} className="group-hover:animate-bounce" />
+
               {count > 0 && (
                 <span className="absolute top-1 right-1 flex h-4 w-4">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -115,7 +176,6 @@ const Navbar = () => {
           </div>
         )}
 
-        {/* AUTH BUTTON - THE "CTA" */}
         <button
           onClick={handleAuthClick}
           disabled={loading}
