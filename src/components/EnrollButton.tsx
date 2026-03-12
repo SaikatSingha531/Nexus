@@ -3,53 +3,75 @@
 import Script from "next/script";
 import { PlayCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 export default function EnrollButton({ video }: { video: any }) {
-  const handlePayment = async () => {
-    try {
-      // 1. Create Order on Server
-      const response = await fetch("/api/razorpay", {
-        method: "POST",
-        body: JSON.stringify({ amount: video.price, videoId: video.id }),
-      });
-      const order = await response.json();
+const [isPurchased, setIsPurchased] = useState(false);
 
-      // 2. Open Razorpay Checkout
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
-        name: "Creator Studio",
-        description: `Enrolling in ${video.title}`,
-        order_id: order.id,
-        handler: async function (response: any) {
-          toast.success("Payment Successful! Welcome to the course.");
-          console.log("Payment ID:", response.razorpay_payment_id);
-        },
-        prefill: {
-          name: "Student Name",
-          email: "student@example.com",
-        },
-        theme: { color: "#7C3AED" }, 
-      };
+useEffect(() => {
+const purchased = localStorage.getItem(`course_${video.id}`);
+if (purchased) {
+setIsPurchased(true);
+}
+}, [video.id]);
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (error) {
-      toast.error("Something went wrong with the payment.");
-    }
+const handlePayment = async () => {
+try {
+const response = await fetch("/api/razorpay", {
+method: "POST",
+body: JSON.stringify({ amount: video.price, videoId: video.id }),
+});
+
+
+  const order = await response.json();
+
+  const options = {
+    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    amount: order.amount,
+    currency: order.currency,
+    name: "Creator Studio",
+    description: `Enrolling in ${video.title}`,
+    order_id: order.id,
+
+    handler: function () {
+      toast.success("Payment Successful!");
+
+      localStorage.setItem(`course_${video.id}`, "purchased");
+      setIsPurchased(true);
+
+      window.location.reload();
+    },
+
+    theme: { color: "#7C3AED" },
   };
 
-  return (
-    <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <button 
-        onClick={handlePayment}
-        className="w-full bg-slate-900 hover:bg-violet-600 text-white py-6 rounded-[1.5rem] font-bold text-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 group"
-      >
-        Enroll Now
-        <PlayCircle className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-      </button>
-    </>
-  );
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+} catch (error) {
+  toast.error("Payment failed.");
+}
+
+
+};
+
+return (
+<> <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
+
+  <button
+    onClick={!isPurchased ? handlePayment : undefined}
+    className={`w-full py-6 rounded-[1.5rem] font-bold text-xl transition-all flex items-center justify-center gap-3
+    ${
+      isPurchased
+        ? "bg-green-600 text-white hover:bg-green-700 cursor-pointer "
+        : "bg-slate-900 hover:bg-violet-600 text-white cursor-pointer"
+    }`}
+  >
+    {isPurchased ? "Course Unlocked 🎉" : "Enroll Now"}
+    <PlayCircle className="w-6 h-6" />
+  </button>
+</>
+
+
+);
 }
