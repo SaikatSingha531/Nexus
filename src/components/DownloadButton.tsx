@@ -25,7 +25,7 @@ export default function DownloadButton({
 
   const handleDownload = () => {
     if (!user) {
-      toast.error("Login first to download the certificate");
+      toast.error("Complete payment to download the certificate");
       return;
     }
 
