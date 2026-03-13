@@ -256,43 +256,54 @@ const CourseVideos = () => {
           ))}
         </div>
 
-        {/* PAGINATION */}
-        <div className="mt-16 flex justify-center">
-          <Pagination>
-            <PaginationContent>
+<div className="mt-16 flex justify-center">
+  <Pagination>
+    <PaginationContent>
 
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                />
-              </PaginationItem>
+      <PaginationItem>
+        <PaginationPrevious
+          onClick={() =>
+            currentPage > 1 &&
+            setCurrentPage((prev) => Math.max(prev - 1, 1))
+          }
+          className={`cursor-pointer ${
+            currentPage === 1
+              ? "pointer-events-none opacity-40"
+              : ""
+          }`}
+        />
+      </PaginationItem>
 
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink
-                    isActive={currentPage === index + 1}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
+      {Array.from({ length: totalPages }).map((_, index) => (
+        <PaginationItem key={index}>
+          <PaginationLink
+            isActive={currentPage === index + 1}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </PaginationLink>
+        </PaginationItem>
+      ))}
 
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      Math.min(prev + 1, totalPages)
-                    )
-                  }
-                />
-              </PaginationItem>
+      <PaginationItem>
+        <PaginationNext
+          onClick={() =>
+            currentPage < totalPages &&
+            setCurrentPage((prev) =>
+              Math.min(prev + 1, totalPages)
+            )
+          }
+          className={`cursor-pointer ${
+            currentPage === totalPages
+              ? "pointer-events-none opacity-40"
+              : ""
+          }`}
+        />
+      </PaginationItem>
 
-            </PaginationContent>
-          </Pagination>
-        </div>
+    </PaginationContent>
+  </Pagination>
+</div>
       </div>
     </div>
   );

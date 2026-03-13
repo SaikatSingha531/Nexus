@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,31 +22,14 @@ import {
 import Image from "next/image";
 import { useAddVideo } from "@/hooks/useVideos";
 import { toast } from "sonner";
+import { FormData } from "@/typescript/interface";
+import { schema } from "@/services/validation/addVideosSchima";
 
-/* ---------------- Validation ---------------- */
-
-
-
-const schema = yup.object({
-  title: yup.string().required("Title is required"),
-  description: yup.string().required("Description is required"),
-  category: yup.string().required("Category is required"),
-  level: yup.string().required("Level is required"),
-  instructor: yup.string().required("Instructor required"),
-  price: yup.string().trim().required("Price Is Required")
-});
 
 
 // type FormData = yup.InferType<typeof schema>;
 
-interface FormData {
-  title: string;
-  description: string;
-  category: string;
-  level: string;
-  instructor: string;
-  price: string ;
-};
+
 
 /* ---------- Improved UploadBox ---------- */
 
