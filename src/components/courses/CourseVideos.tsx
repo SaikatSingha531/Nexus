@@ -1,14 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Heart,
-  Star,
-  Users,
-  ArrowRight,
-  Sparkles,
-  Filter,
-} from "lucide-react";
+import { Heart, Star, Users, ArrowRight, Sparkles, Filter } from "lucide-react";
 
 import { useVideos } from "@/hooks/useVideos";
 import { Badge } from "@/components/ui/badge";
@@ -69,9 +62,7 @@ const CourseVideos = () => {
     }
 
     if (priceFilter === "500to1000") {
-      filtered = filtered.filter(
-        (v: any) => v.price >= 500 && v.price <= 1000
-      );
+      filtered = filtered.filter((v: any) => v.price >= 500 && v.price <= 1000);
     }
 
     if (priceFilter === "above1000") {
@@ -87,7 +78,7 @@ const CourseVideos = () => {
 
   const paginatedVideos = filteredVideos?.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
 
   if (isLoading) {
@@ -256,54 +247,48 @@ const CourseVideos = () => {
           ))}
         </div>
 
-<div className="mt-16 flex justify-center">
-  <Pagination>
-    <PaginationContent>
+        <div className="mt-16 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    currentPage > 1 &&
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  className={`cursor-pointer ${
+                    currentPage === 1 ? "pointer-events-none opacity-40" : ""
+                  }`}
+                />
+              </PaginationItem>
 
-      <PaginationItem>
-        <PaginationPrevious
-          onClick={() =>
-            currentPage > 1 &&
-            setCurrentPage((prev) => Math.max(prev - 1, 1))
-          }
-          className={`cursor-pointer ${
-            currentPage === 1
-              ? "pointer-events-none opacity-40"
-              : ""
-          }`}
-        />
-      </PaginationItem>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={currentPage === index + 1}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
 
-      {Array.from({ length: totalPages }).map((_, index) => (
-        <PaginationItem key={index}>
-          <PaginationLink
-            isActive={currentPage === index + 1}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </PaginationLink>
-        </PaginationItem>
-      ))}
-
-      <PaginationItem>
-        <PaginationNext
-          onClick={() =>
-            currentPage < totalPages &&
-            setCurrentPage((prev) =>
-              Math.min(prev + 1, totalPages)
-            )
-          }
-          className={`cursor-pointer ${
-            currentPage === totalPages
-              ? "pointer-events-none opacity-40"
-              : ""
-          }`}
-        />
-      </PaginationItem>
-
-    </PaginationContent>
-  </Pagination>
-</div>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    currentPage < totalPages &&
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  className={`cursor-pointer ${
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-40"
+                      : ""
+                  }`}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   );

@@ -48,7 +48,7 @@ export const useDeleteVideo = () => {
 
 //   return useMutation({
 //     mutationFn: ({ id, data }: { id: string | number; data: any }) => 
-//       updatecourse(id, data),
+//       updateCourse(id, data),
 
 //     onSuccess:()=>{
 //       queryClient.invalidateQueries({

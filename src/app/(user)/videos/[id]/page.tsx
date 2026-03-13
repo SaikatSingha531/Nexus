@@ -5,6 +5,8 @@ import Link from "next/link";
 import EnrollButton from "@/components/EnrollButton";
 
 import VideoPlayer from "@/components/VideoPlayer";
+import DownloadButton from "@/components/DownloadButton";
+
 
 import {
   PlayCircle,
@@ -163,16 +165,7 @@ const Videowithid = async ({ params }: PageProps) => {
                 <VideoPlayer videoUrl={video.main_video} videoId={video.id} />
               </div>
 
-              <div className="flex justify-end px-4 mt-4">
-                <a
-                  href={video.image}
-                  download
-                  className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 transition"
-                >
-                  <Download className="w-5 h-5" />
-                  Download Certificate
-                </a>
-              </div>
+             <DownloadButton image={video.image} videoId={video.id} />
             </div>
           </div>
 

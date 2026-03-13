@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { UpdateCourseData } from "@/typescript/type";
 
 export const getVideos = async () => {
   const { data, error } = await supabase.from("videoform").select("*");
@@ -133,22 +134,23 @@ export const getVideoById = async (id: string | number) => {
 };
 
 
-// export const updatecourse = async (id:string , updateData:any)=>{
-//   const {error} = await supabase
-//   .from("videoform")
-//   .update({
-//     title:updateData.title,
-//     instructor: updateData.instructor,
-//       category: updateData.category,
-//       price: updateData.price,
-//       level: updateData.level,
-//   })
-//   .eq("id",id)
+export const updateCourse = async (
+  id: string | number,
+  updateData: UpdateCourseData
+) => {
+  const { data, error } = await supabase
+    .from("videoform")
+    .update(updateData)
+    .eq("id", id)
+    .select()
+    .single();
 
-//   if (error) throw new Error(error.message);
-//   return { success: true };
-// }
+  if (error) {
+    throw new Error(error.message);
+  }
 
+  return data;
+};
 
 
 
