@@ -75,17 +75,3 @@ Empowering users to learn, grow, and master skills through an interactive digita
 - **Appwrite / Backend Services**
 
 ---
-
-# 📂 Project Structure
-
-```bash
-nexus/
-│
-├── components        # Reusable UI components
-├── pages / app       # Routing (Next.js)
-├── hooks             # Custom hooks
-├── context / store   # State management
-├── services          # API calls
-├── public            # Assets
-├── styles            # Styling
-└── README.md
