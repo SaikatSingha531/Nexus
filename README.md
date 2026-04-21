@@ -28,7 +28,7 @@ Empowering users to learn, grow, and master skills through an interactive digita
 # 🌐 Live Demo
 
 <p align="center">
-  <a href="https://your-nexus-app.vercel.app">
+  <a href="https://nexusel.vercel.app/">
     <img src="https://img.shields.io/badge/🚀%20Live%20App-Visit%20Now-blue?style=for-the-badge"/>
   </a>
 </p>
