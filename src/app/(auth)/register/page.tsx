@@ -79,7 +79,7 @@ export default function Register() {
       </div>
 
       {/* Register Card */}
-      <div className="w-full max-w-md p-10 border border-white/20 rounded-2xl backdrop-blur-md bg-transparent shadow-2xl text-center">
+      <div className="relative z-10 w-[92%] max-w-md p-6 md:p-10 border border-white/20 rounded-2xl backdrop-blur-md bg-transparent shadow-2xl text-center">
 
         <h1 className="text-3xl font-semibold text-center text-white mb-8 tracking-wide">
           Create Account
