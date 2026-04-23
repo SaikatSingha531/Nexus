@@ -596,7 +596,7 @@ function processPointerInteraction() {
 
 function onTouchStart(e: TouchEvent) {
   if (e.touches.length > 0) {
-    e.preventDefault();
+    // e.preventDefault();
     pointerPosition.set(e.touches[0].clientX, e.touches[0].clientY);
     for (const [elem, data] of pointerMap) {
       const rect = elem.getBoundingClientRect();
@@ -615,7 +615,7 @@ function onTouchStart(e: TouchEvent) {
 
 function onTouchMove(e: TouchEvent) {
   if (e.touches.length > 0) {
-    e.preventDefault();
+    // e.preventDefault();
     pointerPosition.set(e.touches[0].clientX, e.touches[0].clientY);
     for (const [elem, data] of pointerMap) {
       const rect = elem.getBoundingClientRect();
@@ -792,7 +792,7 @@ function createBallpit(canvas: HTMLCanvasElement, config: any = {}): CreateBallp
   const intersectionPoint = new Vector3();
   let isPaused = false;
 
-  canvas.style.touchAction = 'none';
+  canvas.style.touchAction = 'auto';
   canvas.style.userSelect = 'none';
   (canvas.style as any).webkitUserSelect = 'none';
 
