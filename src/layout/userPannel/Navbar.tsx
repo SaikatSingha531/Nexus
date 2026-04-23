@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/zustand/authStore";
 import { useNotifications } from "@/hooks/useNotifications";
-import { getVideos } from "@/zustand/addvideostore";
+import { getVideos } from "@/zustand/addvideostore"; //new 
 
 const Navbar = () => {
   const router = useRouter();
