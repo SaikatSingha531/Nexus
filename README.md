@@ -20,7 +20,7 @@ Empowering users to learn, grow, and master skills through an interactive digita
 # 🎥 Demo Preview
 
 <p align="center">
-  <img src="./assets/demo-preview.png" alt="Nexus Preview" width="800"/>
+  <img src="https://nexusel.vercel.app/" alt="Nexus Preview" width="800"/>
 </p>
 
 ---
